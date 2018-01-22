@@ -1,0 +1,23 @@
+{
+  "name": "elm-weather-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "elm-live src/elm/Main.elm --output=src/static/dist/weather.js --dir=src/static --port=8000 --open",
+    "test": "cd tests && elm-live Main.elm --output=dist/index.html --dir=dist --port=8001 --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Punie/elm-weather-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Punie/elm-weather-app/issues"
+  },
+  "homepage": "https://github.com/Punie/elm-weather-app#readme"
+}

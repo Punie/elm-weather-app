@@ -2,7 +2,6 @@ module Main exposing (main)
 
 import Bootstrap.Alert as Alert
 import Bootstrap.Button as Button
-import Bootstrap.CDN as CDN
 import Bootstrap.Form as Form
 import Bootstrap.Form.Input as Input
 import Bootstrap.Grid as Grid
@@ -36,6 +35,7 @@ init =
 type alias Coordinates =
     { latitude : Float
     , longitude : Float
+    , formattedAddress : String
     }
 
 
@@ -65,6 +65,7 @@ coordinatesDecoder =
     decode Coordinates
         |> custom (field "results" (index 0 (at [ "geometry", "location", "lat" ] float)))
         |> custom (field "results" (index 0 (at [ "geometry", "location", "lng" ] float)))
+        |> custom (field "results" (index 0 (field "formatted_address" string)))
 
 
 weatherDecoder : Decoder Weather
@@ -129,8 +130,7 @@ update msg model =
 view : Model -> Html.Html Msg
 view model =
     Grid.container []
-        [ CDN.stylesheet
-        , Grid.row []
+        [ Grid.row []
             [ Grid.col [ Col.md6, Col.offsetMd3 ]
                 [ Form.formInline []
                     [ Input.text [ Input.placeholder "Address", Input.onInput Input ]
@@ -158,10 +158,16 @@ viewCoords coordinatesWebData =
             Alert.info [ Html.text "Loading..." ]
 
         Failure err ->
-            Alert.danger [ Html.text ("Error: " ++ toString err) ]
+            Alert.danger
+                [ Alert.h3 [] [ Html.text "Error" ]
+                , Html.p [] [ Html.text <| toString err ]
+                ]
 
-        Success { latitude, longitude } ->
-            Alert.success [ Html.text ("(" ++ toString latitude ++ ", " ++ toString longitude ++ ")") ]
+        Success { latitude, longitude, formattedAddress } ->
+            Alert.success
+                [ Alert.h4 [] [ Html.text formattedAddress ]
+                , Html.p [] [ Html.text ("(" ++ toString latitude ++ ", " ++ toString longitude ++ ")") ]
+                ]
 
 
 viewWeather : WebData Weather -> Html.Html Msg

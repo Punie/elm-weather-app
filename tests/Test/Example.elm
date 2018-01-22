@@ -1,4 +1,4 @@
-module Example exposing (..)
+module Test.Example exposing (suite)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)

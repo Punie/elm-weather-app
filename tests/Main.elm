@@ -1,9 +1,9 @@
 module Main exposing (..)
 
-import Example
+import Test.Example
 import Test.Runner.Html
 
 
 main : Test.Runner.Html.TestProgram
 main =
-    Test.Runner.Html.run Example.suite
+    Test.Runner.Html.run Test.Example.suite
