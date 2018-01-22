@@ -9,10 +9,10 @@ import Bootstrap.Grid.Col as Col
 import Geolocation as Geo exposing (Location)
 import Html
 import Http
-import RemoteData exposing (RemoteData(..), WebData)
-import Task
 import Models.Coordinates exposing (Coordinates, coordinatesDecoder)
 import Models.Weather exposing (Weather, weatherDecoder)
+import RemoteData exposing (RemoteData(..), WebData)
+import Task
 
 
 main : Program Never Model Msg
@@ -106,7 +106,7 @@ update msg model =
                             , formattedAddress = ""
                             }
                     in
-                        model ! [ getWeather coords ]
+                    model ! [ getWeather coords ]
 
         CoordResponse ((Success coords) as response) ->
             { model

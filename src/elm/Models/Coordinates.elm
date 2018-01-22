@@ -1,9 +1,17 @@
 module Models.Coordinates exposing (Coordinates, coordinatesDecoder)
 
+{-| Tons of useful functions that get imported by default.
+
+@docs Coordinates
+@docs coordinatesDecoder
+
+-}
+
 import Json.Decode exposing (Decoder, at, field, float, index, string)
 import Json.Decode.Pipeline exposing (custom, decode)
 
 
+{-| -}
 type alias Coordinates =
     { latitude : Float
     , longitude : Float
@@ -11,6 +19,7 @@ type alias Coordinates =
     }
 
 
+{-| -}
 coordinatesDecoder : Decoder Coordinates
 coordinatesDecoder =
     decode Coordinates
