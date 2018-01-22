@@ -6,11 +6,13 @@ import Bootstrap.Form as Form
 import Bootstrap.Form.Input as Input
 import Bootstrap.Grid as Grid
 import Bootstrap.Grid.Col as Col
+import Geolocation as Geo exposing (Location)
 import Html
 import Http
-import Json.Decode exposing (Decoder, at, field, float, index, string)
-import Json.Decode.Pipeline exposing (custom, decode, requiredAt)
 import RemoteData exposing (RemoteData(..), WebData)
+import Task
+import Models.Coordinates exposing (Coordinates, coordinatesDecoder)
+import Models.Weather exposing (Weather, weatherDecoder)
 
 
 main : Program Never Model Msg
@@ -32,19 +34,6 @@ init =
 -- MODEL
 
 
-type alias Coordinates =
-    { latitude : Float
-    , longitude : Float
-    , formattedAddress : String
-    }
-
-
-type alias Weather =
-    { summary : String
-    , temperature : Float
-    }
-
-
 type alias Model =
     { input : String
     , coordinates : WebData Coordinates
@@ -60,21 +49,6 @@ emptyModel =
     }
 
 
-coordinatesDecoder : Decoder Coordinates
-coordinatesDecoder =
-    decode Coordinates
-        |> custom (field "results" (index 0 (at [ "geometry", "location", "lat" ] float)))
-        |> custom (field "results" (index 0 (at [ "geometry", "location", "lng" ] float)))
-        |> custom (field "results" (index 0 (field "formatted_address" string)))
-
-
-weatherDecoder : Decoder Weather
-weatherDecoder =
-    decode Weather
-        |> requiredAt [ "hourly", "summary" ] string
-        |> requiredAt [ "currently", "temperature" ] float
-
-
 
 -- UPDATE
 
@@ -82,12 +56,14 @@ weatherDecoder =
 type Msg
     = Input String
     | Submit
+    | RequestCurrentLocation
+    | CurrentLocationResponse (Result Geo.Error Location)
     | CoordResponse (WebData Coordinates)
     | WeatherResponse (WebData Weather)
 
 
-getNews : String -> Cmd Msg
-getNews address =
+getCoordinates : String -> Cmd Msg
+getCoordinates address =
     Http.get ("http://maps.googleapis.com/maps/api/geocode/json?address=" ++ address) coordinatesDecoder
         |> RemoteData.sendRequest
         |> Cmd.map CoordResponse
@@ -100,6 +76,11 @@ getWeather { latitude, longitude } =
         |> Cmd.map WeatherResponse
 
 
+getCurrentLocation : Cmd Msg
+getCurrentLocation =
+    Task.perform CurrentLocationResponse Geo.now
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -107,7 +88,25 @@ update msg model =
             { model | input = str } ! []
 
         Submit ->
-            { model | coordinates = Loading } ! [ getNews model.input ]
+            { model | coordinates = Loading } ! [ getCoordinates model.input ]
+
+        RequestCurrentLocation ->
+            model ! [ getCurrentLocation ]
+
+        CurrentLocationResponse response ->
+            case response of
+                Err err ->
+                    model ! []
+
+                Ok location ->
+                    let
+                        coords =
+                            { latitude = location.latitude
+                            , longitude = location.longitude
+                            , formattedAddress = ""
+                            }
+                    in
+                        model ! [ getWeather coords ]
 
         CoordResponse ((Success coords) as response) ->
             { model
@@ -140,6 +139,11 @@ view model =
                         , Button.disabled <| model.input == ""
                         ]
                         [ Html.text "Submit" ]
+                    , Button.button
+                        [ Button.primary
+                        , Button.onClick RequestCurrentLocation
+                        ]
+                        [ Html.text "My Location" ]
                     ]
                 , Html.div [] [ viewCoords model.coordinates ]
                 , Html.div [] [ viewWeather model.weather ]
