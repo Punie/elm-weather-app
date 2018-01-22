@@ -78,7 +78,7 @@ getWeather { latitude, longitude } =
 
 getCurrentLocation : Cmd Msg
 getCurrentLocation =
-    Task.perform CurrentLocationResponse Geo.now
+    Task.attempt CurrentLocationResponse Geo.now
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
