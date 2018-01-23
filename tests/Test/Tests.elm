@@ -2,8 +2,8 @@ module Test.Tests exposing (suite)
 
 import Expect exposing (Expectation)
 import Json.Decode exposing (decodeString)
-import Models.Coordinates exposing (Coordinates, coordinatesDecoder)
-import Models.Weather exposing (Weather, weatherDecoder)
+import Data.Coordinates exposing (Coordinates, coordinatesDecoder)
+import Data.Weather exposing (Weather, weatherDecoder)
 import Test exposing (..)
 
 

@@ -7,8 +7,8 @@
         "src/elm"
     ],
     "exposed-modules": [
-      "Models.Coordinates",
-      "Models.Weather"
+      "Data.Coordinates",
+      "Data.Weather"
     ],
     "dependencies": {
         "NoRedInk/elm-decode-pipeline": "3.0.0 <= v < 4.0.0",
