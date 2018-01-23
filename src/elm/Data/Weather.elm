@@ -1,4 +1,4 @@
-module Models.Weather exposing (Weather, weatherDecoder)
+module Data.Weather exposing (Weather, weatherDecoder)
 
 {-| Tons of useful functions that get imported by default.
 

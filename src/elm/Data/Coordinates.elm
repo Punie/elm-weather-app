@@ -1,4 +1,4 @@
-module Models.Coordinates exposing (Coordinates, coordinatesDecoder)
+module Data.Coordinates exposing (Coordinates, coordinatesDecoder)
 
 {-| Tons of useful functions that get imported by default.
 

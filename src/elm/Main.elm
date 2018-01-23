@@ -9,8 +9,8 @@ import Bootstrap.Grid.Col as Col
 import Geolocation as Geo exposing (Location)
 import Html
 import Http
-import Models.Coordinates exposing (Coordinates, coordinatesDecoder)
-import Models.Weather exposing (Weather, weatherDecoder)
+import Data.Coordinates exposing (Coordinates, coordinatesDecoder)
+import Data.Weather exposing (Weather, weatherDecoder)
 import RemoteData exposing (RemoteData(..), WebData)
 import Task
 
@@ -91,7 +91,7 @@ update msg model =
             { model | coordinates = Loading } ! [ getCoordinates model.input ]
 
         RequestCurrentLocation ->
-            model ! [ getCurrentLocation ]
+            { model | input = "" } ! [ getCurrentLocation ]
 
         CurrentLocationResponse response ->
             case response of
@@ -101,12 +101,9 @@ update msg model =
                 Ok location ->
                     let
                         coords =
-                            { latitude = location.latitude
-                            , longitude = location.longitude
-                            , formattedAddress = ""
-                            }
+                            toString location.latitude ++ "," ++ toString location.longitude
                     in
-                    model ! [ getWeather coords ]
+                        { model | coordinates = NotAsked } ! [ getCoordinates coords ]
 
         CoordResponse ((Success coords) as response) ->
             { model
