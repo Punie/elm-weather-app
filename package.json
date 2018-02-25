@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "elm-live src/elm/Main.elm --output=src/static/dist/weather.js --dir=src/static --port=8000 --open",
-    "test": "cd tests && elm-live Main.elm --output=dist/index.html --dir=dist --port=8001 --open"
+    "test": "cd tests && elm-live Main.elm --output=dist/index.html --dir=dist --port=8001 --open",
+    "lint": "eslint **/*.js"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,10 @@
     "elm": "^0.18.0",
     "elm-live": "^2.7.5",
     "elm-test": "^0.18.12"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0"
   }
 }
