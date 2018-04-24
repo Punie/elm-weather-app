@@ -95,7 +95,7 @@ update msg model =
 
         CurrentLocationResponse response ->
             case response of
-                Err err ->
+                Err _ ->
                     model ! []
 
                 Ok location ->

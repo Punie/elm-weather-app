@@ -21,11 +21,7 @@
     "url": "https://github.com/Punie/elm-weather-app/issues"
   },
   "homepage": "https://github.com/Punie/elm-weather-app#readme",
-  "dependencies": {
-    "elm": "^0.18.0",
-    "elm-live": "^2.7.5",
-    "elm-test": "^0.18.12"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^4.18.1",
     "eslint-config-airbnb-base": "^12.1.0",
